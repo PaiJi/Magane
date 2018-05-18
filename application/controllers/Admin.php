@@ -18,32 +18,52 @@ class Admin extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+    public function __construct(){
+        parent::__construct();
+        $this->load->library('session');
+        $this->load->helper('url');
+    }
 	public function index()
-	{
-        //$this->load->view('welcome_message');
-        $this->load->database();
-        $query=$this->db->query('SELECT max(id) FROM magane_posts');
-        $row=$query->row_array();
-        $MAX_ID=$row['max(id)'];
-        $POSTS_NUM=$MAX_ID-0;
-        $Single_POST_ID=rand(0,$POSTS_NUM);
-        //echo $Single_POST_ID;
-        $query="SELECT * FROM magane_posts where ID=?";
-        $query=$this->db->query($query,array($Single_POST_ID));
-        $row=$query->row_array();
-        //$row=$query->row_array();
-        //echo $row['post_content'];
-        //var_dump($row);
-        //echo $row['post_content'];
-        echo json_encode($row);
-        
+	{        
+        if ($this->session->auth_status==true) {
+            redirect('/Admin/control','refresh');
+        }
+        else{
+            redirect('/Admin/login','refresh');
+        }
     }
     public function login()
     {
         $this->load->model('admin/user/user');
-        $this->user->user_exist();
-        $this->load->helper(array('form', 'url'));
-        $this->load->library('form_validation');
-        $this->load->view('admin/user');
+        $this->load->helper(array('form', 'url'));//表单类加载
+        $this->load->library('form_validation');//表单验证加载
+        $this->form_validation->set_rules('username', 'Username', array('required',array('user_exist',array($this->user,'user_exist'))));
+        $this->form_validation->set_message('user_exist', '这个世界线并不知晓你的存在');
+        $this->form_validation->set_rules('password', 'Auth', 'required');
+        $this->form_validation->set_message('required', '{field} 为必要数据');
+        if ($this->form_validation->run() == FALSE)
+        {
+            $this->load->view('admin/user');
+        }
+        else
+        {
+            $status=$this->user->login();
+            if($status){
+                $this->session->auth_status=true;
+                redirect('/admin/control','refresh');
+                
+            }
+        }
+    }
+    public function control()
+    {
+        if ($this->session->auth_status==true) {
+            $this->load->view('admin/control');
+        }
+        else{
+            redirect('/admin/login','refresh');
+            
+        }
+        
     }
 }
