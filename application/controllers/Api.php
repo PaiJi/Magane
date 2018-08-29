@@ -2,44 +2,30 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Api extends CI_Controller {
-
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/user_guide/general/urls.html
-	 */
-	public function index()
-	{
-        //$this->load->view('welcome_message');
-        $this->load->database();
-        $query=$this->db->query('SELECT max(id) FROM magane_posts');
-        $row=$query->row_array();
-        $MAX_ID=$row['max(id)'];
-        $POSTS_NUM=$MAX_ID-0;
-        $Single_POST_ID=rand(0,$POSTS_NUM);
-        //echo $Single_POST_ID;
-        $query="SELECT * FROM magane_posts where ID=?";
-        $query=$this->db->query($query,array($Single_POST_ID));
-        $row=$query->row_array();
-        //$row=$query->row_array();
-        //echo $row['post_content'];
-        //var_dump($row);
-        //echo $row['post_content'];
-        echo json_encode($row);
-        
+    public function __construct(){
+        parent::__construct();
+        $this->load->library('session');
+        $this->load->helper('url');
     }
-    public function help()
+	public function getone()
+	{
+        $this->load->model('magane/magane');
+        $this->magane->getOne();
+    }
+    public function login()
     {
-        echo ("Coming soon.");
+        $this->load->model('admin/user/user');
+        if($this->input->get('username')&&$this->input->get('password')){
+            $loginStatus=$this->user->login();
+            if ($loginStatus) {
+                $this->output->set_content_type('application/json')->set_output(json_encode(array('status'=>'1','msg'=>'Login success.LINK START.')));
+            }
+           else{
+            $this->output->set_content_type('application/json')->set_output(json_encode(array('status'=>'0','msg'=>'Login faild.')));
+           }
+        }
+        else{
+            $this->output->set_content_type('application/json')->set_output(json_encode(array('status'=>'0','msg'=>'Missing value.')));
+        }
     }
 }
