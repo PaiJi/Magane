@@ -3,36 +3,50 @@ defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 	<!DOCTYPE html>
 	<html lang="zh-cn">
+
 	<head>
 		<meta charset="utf-8">
-		<title>Magane / 微小的语句，也具有巨大的力量</title>
+		<title>Welcome to Control! / Magane</title>
 		<link href="<?php echo base_url();?>/sources/stylesheet/css/bootstrap.min.css" rel="stylesheet">
 		<link href="<?php echo base_url();?>/sources/stylesheet/css/common.css" rel="stylesheet">
 	</head>
+
 	<body>
-		<div class="container col-md-3  d-flex h-100" id="container">
-			<div class="row justify-content-center align-self-center">
-				<h3 class="login-box-title text-center">Welcome to Control Center!</h3>
-				<div id="body">
-					<?php echo validation_errors(); ?>
-					<?php echo form_open('admin/login'); ?>
-					<div class="form-group ">
-						<span class="">Token</span>
-						<input class="form-control " type="text" name="username" value="" size="50" />
-					</div>
-					<div class="form-group">
-						<span>Auth</span>
-						<input class="form-control" type="password" name="password" value="" size="50" />
-					</div>
-					<div class="text-center">
-						<input class="btn btn-primary mx-auto" type="submit" value="Link Start!" />
-					</div>
-					</form>
-				</div>
-				<p class="footer">
-					<span id="hitokoto" style="float:left;"></span>页面执行
-					<strong>{elapsed_time}</strong> 秒</p>
+		<div class="jumbotron jumbotron-fluid">
+			<div class="container">
+				<h1 class="display-4">Magane Control Bored</h1>
+				<p class="lead" id="hitokoto">What have you see?</p>
 			</div>
+		</div>
+		<div class="container">
+		<hr class="my-4">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="card" style="">
+						<div class="card-body text-center">
+							<h5 class="card-title">今日新增</h5>
+							<p class="card-text">0</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card" style="">
+						<div class="card-body text-center">
+							<h5 class="card-title">今日调用次数</h5>
+							<p class="card-text">0</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card" style="">
+						<div class="card-body text-center">
+							<h5 class="card-title">数据总数</h5>
+							<p class="card-text">0</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr class="my-4">
 		</div>
 		<script src="https://cdn.jsdelivr.net/npm/bluebird@3/js/browser/bluebird.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/whatwg-fetch@2.0.3/fetch.min.js"></script>
@@ -53,4 +67,5 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 		</script>
 	</body>
+
 	</html>
