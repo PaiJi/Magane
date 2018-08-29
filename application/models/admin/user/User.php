@@ -9,8 +9,8 @@ class User extends CI_Model {
         parent::__construct();
         // Your own constructor code
         $this->load->database();
+        $this->load->library('session');
         $this->load->helper('url');
-
     }
     public function user_exist()
     {
@@ -34,10 +34,11 @@ class User extends CI_Model {
         $data=$query->row_array();
         if($data['user_pass']==$password)
         {
-            //echo ('login success');
+            $this->session->auth_status=true;
             return true;
         }
         else{
+            $this->session->auth_status=false;
             return false;
         }
     }
